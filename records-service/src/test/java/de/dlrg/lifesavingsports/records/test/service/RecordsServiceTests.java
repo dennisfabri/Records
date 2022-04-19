@@ -4,13 +4,13 @@ import de.dlrg.lifesavingsports.records.api.Gender;
 import de.dlrg.lifesavingsports.records.api.RecordDisciplineDto;
 import de.dlrg.lifesavingsports.records.api.RecordDto;
 import de.dlrg.lifesavingsports.records.api.RecordTypeDto;
-import de.dlrg.lifesavingsports.records.service.RecordTypesRepository;
 import de.dlrg.lifesavingsports.records.service.RecordsService;
 import de.dlrg.lifesavingsports.records.service.exception.RecordTypeUnknownException;
-import lombok.NonNull;
+import de.dlrg.lifesavingsports.records.test.service.doubles.InMemoryRecordTypeDtoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.lisasp.basics.jre.id.CountingIdGenerator;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -19,7 +19,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RecordsServiceTests {
+class RecordsServiceTests {
 
     private RecordsService recordsService;
 
@@ -28,7 +28,7 @@ public class RecordsServiceTests {
 
         @BeforeEach
         void prepare() {
-            recordsService = new RecordsService(new InMemoryRecordTypesRepository());
+            recordsService = new RecordsService(new InMemoryRecordTypeDtoRepository(), new CountingIdGenerator());
         }
 
         @Test
@@ -43,12 +43,13 @@ public class RecordsServiceTests {
         void fetchRecordTypesWithOneEntry() {
             recordsService.createRecordType("Deutscher Rekord 1", "DR1");
             RecordTypeDto[] expected = new RecordTypeDto[]{
-                    new RecordTypeDto("Deutscher Rekord 1", "DR1")
+                    new RecordTypeDto("1", "Deutscher Rekord 1", "DR1")
             };
 
             RecordTypeDto[] actual = recordsService.fetchRecordTypes();
 
-            assertArrayEquals(expected, Arrays.stream(actual).sorted(Comparator.comparing(RecordTypeDto::getAcronym)).toArray());
+            RecordTypeDto[] sortedActual = Arrays.stream(actual).sorted(Comparator.comparing(RecordTypeDto::getAcronym)).toArray(RecordTypeDto[]::new);
+            assertArrayEquals(expected, sortedActual);
         }
 
         @Test
@@ -56,8 +57,8 @@ public class RecordsServiceTests {
             recordsService.createRecordType("Deutscher Rekord 1", "DR1");
             recordsService.createRecordType("Deutscher Rekord 2", "DR2");
             RecordTypeDto[] expected = new RecordTypeDto[]{
-                    new RecordTypeDto("Deutscher Rekord 1", "DR1"),
-                    new RecordTypeDto("Deutscher Rekord 2", "DR2")
+                    new RecordTypeDto("1", "Deutscher Rekord 1", "DR1"),
+                    new RecordTypeDto("2", "Deutscher Rekord 2", "DR2")
             };
 
             RecordTypeDto[] actual = recordsService.fetchRecordTypes();
@@ -71,9 +72,9 @@ public class RecordsServiceTests {
             recordsService.createRecordType("Deutscher Rekord 2", "DR2");
             recordsService.createRecordType("Deutscher Rekord 3", "DR3");
             RecordTypeDto[] expected = new RecordTypeDto[]{
-                    new RecordTypeDto("Deutscher Rekord 1", "DR1"),
-                    new RecordTypeDto("Deutscher Rekord 2", "DR2"),
-                    new RecordTypeDto("Deutscher Rekord 3", "DR3")
+                    new RecordTypeDto("1","Deutscher Rekord 1", "DR1"),
+                    new RecordTypeDto("2","Deutscher Rekord 2", "DR2"),
+                    new RecordTypeDto("3","Deutscher Rekord 3", "DR3")
             };
 
             RecordTypeDto[] actual = recordsService.fetchRecordTypes();
@@ -87,7 +88,7 @@ public class RecordsServiceTests {
 
         @BeforeEach
         void prepare() {
-            recordsService = new RecordsService(new InMemoryRecordTypesRepository());
+            recordsService = new RecordsService(new InMemoryRecordTypeDtoRepository(), new CountingIdGenerator());
             recordsService.createRecordType("Deutscher Rekord", "DR");
         }
 
@@ -114,7 +115,7 @@ public class RecordsServiceTests {
 
         @BeforeEach
         void prepare() {
-            recordsService = new RecordsService(new InMemoryRecordTypesRepository());
+            recordsService = new RecordsService(new InMemoryRecordTypeDtoRepository(), new CountingIdGenerator());
             recordsService.createRecordType("Deutscher Rekord", "DR");
             recordDisciplineDto = recordsService.createDiscipline("DR", "Altersklasse", Gender.Mixed, "Disziplin");
         }
@@ -144,27 +145,9 @@ public class RecordsServiceTests {
             Duration time = Duration.ofMillis(123450);
             LocalDate date = LocalDate.of(2022, Month.APRIL, 2);
 
-            assertThrows(RecordTypeUnknownException.class, () -> recordsService.createRecord(recordDisciplineDto, "Name", "Club", "Nation", time, "Venue", date));
+            assertThrows(RecordTypeUnknownException.class,
+                         () -> recordsService.createRecord(recordDisciplineDto, "Name", "Club", "Nation", time, "Venue", date));
         }
     }
 
-    private static class InMemoryRecordTypesRepository implements RecordTypesRepository {
-
-        private final Set<RecordTypeDto> entries = new HashSet<>();
-
-        @Override
-        public void put(@NonNull RecordTypeDto recordType) {
-            entries.add(recordType);
-        }
-
-        @Override
-        public Optional<RecordTypeDto> findByAcronym(@NonNull String acronym) {
-            return entries.stream().filter(dto -> dto.getAcronym().equals(acronym)).findFirst();
-        }
-
-        @Override
-        public RecordTypeDto[] findAll() {
-            return entries.toArray(RecordTypeDto[]::new);
-        }
-    }
 }

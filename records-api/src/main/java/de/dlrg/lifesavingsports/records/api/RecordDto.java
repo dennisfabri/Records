@@ -1,21 +1,24 @@
 package de.dlrg.lifesavingsports.records.api;
 
 import de.dlrg.lifesavingsports.records.api.Gender;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
 import java.time.Duration;
 import java.time.LocalDate;
 
-@Value
+@Data
 public class RecordDto {
-    private final String acronym;
-    private final String agegroup;
-    private final Gender gender;
-    private final String discipline;
-    private final String name;
-    private final String club;
-    private final String nation;
-    private final Duration time;
-    private final String venue;
-    private final LocalDate date;
+    private  String acronym;
+    private  String agegroup;
+    private  Gender gender;
+    private  String discipline;
+    private  String name;
+    private  String club;
+    private  String nation;
+    private  Duration time;
+    private  String venue;
+    private  LocalDate date;
 }

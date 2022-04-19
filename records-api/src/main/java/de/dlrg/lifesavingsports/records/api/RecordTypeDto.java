@@ -4,6 +4,7 @@ import lombok.Value;
 
 @Value
 public class RecordTypeDto {
+    private final String id;
     private final String name;
     private final String acronym;
 }

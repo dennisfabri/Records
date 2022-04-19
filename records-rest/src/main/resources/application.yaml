@@ -1,0 +1,28 @@
+server:
+  port: 9999
+
+keycloak:
+  realm: rekorde
+  auth-server-url: http://localhost:9991/auth/
+  ssl-required: external
+  resource: records-rest
+  public-client: false
+  confidential-port: 0
+  use-resource-role-mappings: true
+  credentials.secret: rest-secret
+
+spring:
+  jpa:
+    show-sql: false
+    generate-ddl: true
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:records;DB_CLOSE_DELAY=-1
+    username: records
+    password: records
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /api-docs-ui.html

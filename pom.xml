@@ -17,6 +17,8 @@
     <modules>
         <module>records-api</module>
         <module>records-service</module>
+        <module>records-rest</module>
+        <module>records-ui</module>
     </modules>
 
     <name>DLRG Rekorde im Rettungssport</name>
@@ -30,6 +32,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
         <basics.version>1.0.0-SNAPSHOT</basics.version>
+        <vaadin.version>23.0.4</vaadin.version>
 
         <slf4j.version>1.7.36</slf4j.version>
         <lombok.version>1.18.22</lombok.version>
@@ -93,6 +96,27 @@
             </dependency>
 
             <dependency>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-bom</artifactId>
+                <version>${vaadin.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.vaadin.artur.exampledata</groupId>
+                <artifactId>exampledata</artifactId>
+                <version>3.4.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.keycloak.bom</groupId>
+                <artifactId>keycloak-adapter-bom</artifactId>
+                <version>17.0.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
                 <groupId>org.jetbrains</groupId>
                 <artifactId>annotations</artifactId>
                 <version>${jetbrains.annotations.version}</version>
@@ -126,9 +150,25 @@
                 <type>pom</type>
             </dependency>
             <dependency>
+                <groupId>org.junit.vintage</groupId>
+                <artifactId>junit-vintage-engine</artifactId>
+                <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.hamcrest</groupId>
+                        <artifactId>hamcrest-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
                 <version>${mockito.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.bonigarcia</groupId>
+                <artifactId>webdrivermanager</artifactId>
+                <scope>test</scope>
             </dependency>
 
             <dependency>
@@ -387,7 +427,7 @@
                         </goals>
                         <configuration>
                             <includes>
-                                <include>de/dlrg/rettungssport/rekorde/integrationstest/**/*.java</include>
+                                <include>de/dlrg/lifesavingsports/records/integrationstest/**/*.java</include>
                             </includes>
                         </configuration>
                     </execution>
@@ -412,6 +452,15 @@
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
             <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <!-- Repository used by many Vaadin add-ons -->
+        <repository>
+            <id>Vaadin Directory</id>
+            <url>https://maven.vaadin.com/vaadin-addons</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>

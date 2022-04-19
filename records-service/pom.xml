@@ -16,5 +16,10 @@
             <groupId>de.dlrg.lifesavingsports.records</groupId>
             <artifactId>records-api</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.lisasp.basics</groupId>
+            <artifactId>basics-jre</artifactId>
+        </dependency>
     </dependencies>
 </project>
