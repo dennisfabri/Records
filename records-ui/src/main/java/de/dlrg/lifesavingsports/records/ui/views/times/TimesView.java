@@ -7,17 +7,14 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import de.dlrg.lifesavingsports.records.api.Gender;
 import de.dlrg.lifesavingsports.records.ui.views.MainLayout;
-import lombok.RequiredArgsConstructor;
 
 import javax.annotation.security.RolesAllowed;
-import java.util.Arrays;
-import java.util.Collection;
 
 @PageTitle("Times")
 @Route(value = "times", layout = MainLayout.class)
@@ -38,7 +35,7 @@ public class TimesView extends Div implements AfterNavigationObserver {
         grid.addComponentColumn(person -> createCard(person));
         add(grid);
 
-        grid.setItems(query -> timesService.fetchTimes(query.getOffset(), query.getLimit()));
+        grid.setItems(query -> this.timesService.fetchTimes("open", Gender.Female, query.getOffset(), query.getLimit()));
     }
 
     private HorizontalLayout createCard(Person person) {
@@ -79,9 +76,5 @@ public class TimesView extends Div implements AfterNavigationObserver {
 
     @Override
     public void afterNavigation(AfterNavigationEvent event) {
-        // Person[] persons = timesService.fetchTimes();
-        // grid.setItems(persons);
-        // grid.setItems((Collection<Person>) timesService.fetchTimes());
-        // grid.setItems(.toArray(Person[]::new));
     }
 }

@@ -69,7 +69,11 @@ public class MyTimesView extends Div implements BeforeEnterObserver {
         grid.addColumn("name").setAutoWidth(true);
         grid.addColumn("club").setAutoWidth(true);
         grid.addColumn("nation").setAutoWidth(true);
-        grid.setItems(query -> timeModelService.findAll());
+        grid.setItems(query -> {
+            query.getOffset();
+            query.getLimit();
+            return timeModelService.findAll();
+        });
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
 
         // when a row is selected or deselected, populate form

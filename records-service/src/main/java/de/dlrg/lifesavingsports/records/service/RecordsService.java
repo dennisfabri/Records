@@ -56,7 +56,7 @@ public class RecordsService {
         recordTypeDtoRepository.findByAcronym(acronym).orElseThrow(() -> new RecordTypeUnknownException(acronym));
     }
 
-    public RecordDto[] getRecords() {
+    public RecordDto[] getRecords(String agegroup, Gender gender, int offset, int limit) {
         return new RecordDto[]{new RecordDto("DR",
                                              "Open",
                                              Gender.Mixed,
