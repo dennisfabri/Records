@@ -4,7 +4,7 @@ import de.dlrg.lifesavingsports.records.api.RecordTypeDto;
 
 import java.util.Optional;
 
-public interface RecordTypeDtoRepository {
+public interface RecordTypesRepository {
     void put(RecordTypeDto recordType);
     Optional<RecordTypeDto> findByAcronym(String acronym);
     RecordTypeDto[] findAll();

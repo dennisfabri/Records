@@ -1,6 +1,6 @@
 package de.dlrg.lifesavingsports.records.rest;
 
-import de.dlrg.lifesavingsports.records.service.RecordTypeDtoRepository;
+import de.dlrg.lifesavingsports.records.service.RecordTypesRepository;
 import de.dlrg.lifesavingsports.records.service.RecordsService;
 import org.lisasp.basics.jre.id.IdGenerator;
 import org.lisasp.basics.jre.id.UUIDGenerator;
@@ -19,7 +19,7 @@ public class RestApplication {
 
 	@Bean
 	@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
-	RecordsService recordsService(RecordTypeDtoRepository recordTypes, IdGenerator idGenerator) {
+	RecordsService recordsService(RecordTypesRepository recordTypes, IdGenerator idGenerator) {
 		return new RecordsService(recordTypes, idGenerator);
 	}
 

@@ -3,7 +3,7 @@ package de.dlrg.lifesavingsports.records.rest.service;
 import de.dlrg.lifesavingsports.records.api.RecordTypeDto;
 import de.dlrg.lifesavingsports.records.rest.data.RecordType;
 import de.dlrg.lifesavingsports.records.rest.repository.RecordTypeRepository;
-import de.dlrg.lifesavingsports.records.service.RecordTypeDtoRepository;
+import de.dlrg.lifesavingsports.records.service.RecordTypesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class RecordTypes implements RecordTypeDtoRepository {
+public class RecordTypes implements RecordTypesRepository {
 
     private final RecordTypeRepository repository;
 

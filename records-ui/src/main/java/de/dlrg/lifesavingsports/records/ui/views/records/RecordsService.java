@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.keycloak.adapters.springsecurity.client.KeycloakRestTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -19,7 +20,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class RecordsService {
 
-    private final KeycloakRestTemplate keycloakRestTemplate;
+    private final RestTemplate keycloakRestTemplate =new RestTemplate();
 
     private static Record createPerson(RecordDto recordDto) {
         return new Record(recordDto.getName(), recordDto.getClub(), recordDto.getNation());

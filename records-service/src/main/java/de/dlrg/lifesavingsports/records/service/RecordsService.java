@@ -15,12 +15,14 @@ import java.time.Month;
 @RequiredArgsConstructor
 public class RecordsService {
 
-    private final RecordTypeDtoRepository recordTypeDtoRepository;
+    private final RecordTypesRepository recordTypesRepository;
+
+    private final RecordsRepository recordsRepository;
     private final IdGenerator idGenerator;
 
     public RecordTypeDto createRecordType(String name, String acronym) {
         RecordTypeDto dto = new RecordTypeDto(idGenerator.nextId(), name, acronym);
-        recordTypeDtoRepository.put(dto);
+        recordTypesRepository.put(dto);
         return dto;
     }
 
@@ -30,7 +32,7 @@ public class RecordsService {
     }
 
     public RecordTypeDto[] fetchRecordTypes() {
-        return recordTypeDtoRepository.findAll();
+        return recordTypesRepository.findAll();
     }
 
     public RecordDto createRecord(RecordDisciplineDto recordDisciplineDto, String name, String club, String nation, Duration time, String venue, LocalDate date)
@@ -38,34 +40,25 @@ public class RecordsService {
         assertValidRecordTypeAcronym(recordDisciplineDto.getRecordTypeAcronym());
         assertValidRecordDiscipline(recordDisciplineDto);
         return new RecordDto(recordDisciplineDto.getRecordTypeAcronym(),
-                             recordDisciplineDto.getAgegroup(),
-                             recordDisciplineDto.getGender(),
-                             recordDisciplineDto.getDiscipline(),
-                             name,
-                             club,
-                             nation,
-                             time,
-                             venue,
-                             date);
+                recordDisciplineDto.getAgegroup(),
+                recordDisciplineDto.getGender(),
+                recordDisciplineDto.getDiscipline(),
+                name,
+                club,
+                nation,
+                time,
+                venue,
+                date);
     }
 
     private void assertValidRecordDiscipline(RecordDisciplineDto recordDisciplineDto) {
     }
 
     private void assertValidRecordTypeAcronym(String acronym) throws RecordTypeUnknownException {
-        recordTypeDtoRepository.findByAcronym(acronym).orElseThrow(() -> new RecordTypeUnknownException(acronym));
+        recordTypesRepository.findByAcronym(acronym).orElseThrow(() -> new RecordTypeUnknownException(acronym));
     }
 
     public RecordDto[] getRecords(String agegroup, Gender gender, int offset, int limit) {
-        return new RecordDto[]{new RecordDto("DR",
-                                             "Open",
-                                             Gender.Mixed,
-                                             "A discipline",
-                                             "Utopia",
-                                             "Somewhere",
-                                             "UT",
-                                             Duration.ofMillis(123450),
-                                             "UT Venue",
-                                             LocalDate.of(2022, Month.APRIL, 5))};
+        return recordsRepository.findByAgegroupAndGender(agegroup, gender);
     }
 }
