@@ -7,6 +7,7 @@ import de.dlrg.lifesavingsports.records.api.RecordTypeDto;
 import de.dlrg.lifesavingsports.records.service.RecordsService;
 import de.dlrg.lifesavingsports.records.service.exception.RecordTypeUnknownException;
 import de.dlrg.lifesavingsports.records.test.service.doubles.InMemoryRecordTypesRepository;
+import de.dlrg.lifesavingsports.records.test.service.doubles.InMemoryRecordsRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ class RecordsServiceTests {
 
         @BeforeEach
         void prepare() {
-            recordsService = new RecordsService(new InMemoryRecordTypesRepository(), new CountingIdGenerator());
+            recordsService = new RecordsService(new InMemoryRecordTypesRepository(), new InMemoryRecordsRepository(), new CountingIdGenerator());
         }
 
         @Test
@@ -88,7 +89,7 @@ class RecordsServiceTests {
 
         @BeforeEach
         void prepare() {
-            recordsService = new RecordsService(new InMemoryRecordTypesRepository(), new CountingIdGenerator());
+            recordsService = new RecordsService(new InMemoryRecordTypesRepository(), new InMemoryRecordsRepository(), new CountingIdGenerator());
             recordsService.createRecordType("Deutscher Rekord", "DR");
         }
 
@@ -115,7 +116,7 @@ class RecordsServiceTests {
 
         @BeforeEach
         void prepare() {
-            recordsService = new RecordsService(new InMemoryRecordTypesRepository(), new CountingIdGenerator());
+            recordsService = new RecordsService(new InMemoryRecordTypesRepository(), new InMemoryRecordsRepository(), new CountingIdGenerator());
             recordsService.createRecordType("Deutscher Rekord", "DR");
             recordDisciplineDto = recordsService.createDiscipline("DR", "Altersklasse", Gender.Mixed, "Disziplin");
         }
@@ -168,7 +169,6 @@ class RecordsServiceTests {
             RecordDto[] actual = recordsService.getRecords(recordDisciplineDto.getAgegroup(), recordDisciplineDto.getGender(), 0, 50);
 
             assertArrayEquals(expected, actual);
-
         }
     }
 
