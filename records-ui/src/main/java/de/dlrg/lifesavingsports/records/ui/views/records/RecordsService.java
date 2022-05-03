@@ -4,7 +4,7 @@ import de.dlrg.lifesavingsports.records.api.Gender;
 import de.dlrg.lifesavingsports.records.api.RecordDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.keycloak.adapters.springsecurity.client.KeycloakRestTemplate;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -20,10 +20,17 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class RecordsService {
 
-    private final RestTemplate keycloakRestTemplate =new RestTemplate();
+    private final RestTemplate keycloakRestTemplate = new RestTemplate();
 
-    private static Record createPerson(RecordDto recordDto) {
-        return new Record(recordDto.getName(), recordDto.getClub(), recordDto.getNation());
+    private static @NotNull Record convertToViewModel(RecordDto recordDto) {
+        return new Record(recordDto.getDiscipline(),
+                          recordDto.getName(),
+                          recordDto.getClub(),
+                          recordDto.getNation(),
+                          recordDto.getGender().toString(),
+                          recordDto.getVenue(),
+                          recordDto.getDate().toString(),
+                          recordDto.getTime().toString());
     }
 
     Stream<Record> fetchTimes(String agegroup, Gender gender, int offset, int limit) {
@@ -32,7 +39,7 @@ public class RecordsService {
                                                            HttpMethod.GET,
                                                            null,
                                                            RecordDto[].class)
-                                     .getBody()).map(r -> createPerson(r)).skip(offset).limit(limit);
+                                     .getBody()).map(r -> convertToViewModel(r));
     }
 
     private URI createURI(String agegroup, Gender gender, int offset, int limit) {

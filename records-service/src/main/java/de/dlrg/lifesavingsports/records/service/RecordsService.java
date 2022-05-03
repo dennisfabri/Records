@@ -11,12 +11,12 @@ import org.lisasp.basics.jre.id.IdGenerator;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 public class RecordsService {
 
     private final RecordTypesRepository recordTypesRepository;
-
     private final RecordsRepository recordsRepository;
     private final IdGenerator idGenerator;
 
@@ -39,16 +39,17 @@ public class RecordsService {
             throws RecordTypeUnknownException {
         assertValidRecordTypeAcronym(recordDisciplineDto.getRecordTypeAcronym());
         assertValidRecordDiscipline(recordDisciplineDto);
-        return new RecordDto(recordDisciplineDto.getRecordTypeAcronym(),
-                recordDisciplineDto.getAgegroup(),
-                recordDisciplineDto.getGender(),
-                recordDisciplineDto.getDiscipline(),
-                name,
-                club,
-                nation,
-                time,
-                venue,
-                date);
+        return recordsRepository.save(new RecordDto(idGenerator.nextId(),
+                                                    recordDisciplineDto.getRecordTypeAcronym(),
+                                                    recordDisciplineDto.getAgegroup(),
+                                                    recordDisciplineDto.getGender(),
+                                                    recordDisciplineDto.getDiscipline(),
+                                                    name,
+                                                    club,
+                                                    nation,
+                                                    time,
+                                                    venue,
+                                                    date));
     }
 
     private void assertValidRecordDiscipline(RecordDisciplineDto recordDisciplineDto) {
@@ -58,7 +59,7 @@ public class RecordsService {
         recordTypesRepository.findByAcronym(acronym).orElseThrow(() -> new RecordTypeUnknownException(acronym));
     }
 
-    public RecordDto[] getRecords(String agegroup, Gender gender, int offset, int limit) {
-        return recordsRepository.findByAgegroupAndGender(agegroup, gender);
+    public Stream<RecordDto> getRecords(String agegroup, Gender gender, int offset, int limit) {
+        return recordsRepository.findByAgegroupAndGender(agegroup, gender).skip(offset).limit(limit);
     }
 }

@@ -154,7 +154,7 @@ class RecordsServiceTests {
         void getRecordsWithEmptyResult() {
             RecordDto[] expected = new RecordDto[0];
 
-            RecordDto[] actual = recordsService.getRecords("Altersklasse", Gender.Mixed, 0, 50);
+            RecordDto[] actual = recordsService.getRecords("Altersklasse", Gender.Mixed, 0, 50).toArray(RecordDto[]::new);
 
             assertArrayEquals(expected, actual);
         }
@@ -166,10 +166,9 @@ class RecordsServiceTests {
             RecordDto recordDto = recordsService.createRecord(recordDisciplineDto, "Name", "Club", "Nation", time, "Venue", date);
             RecordDto[] expected = new RecordDto[]{recordDto};
 
-            RecordDto[] actual = recordsService.getRecords(recordDisciplineDto.getAgegroup(), recordDisciplineDto.getGender(), 0, 50);
+            RecordDto[] actual = recordsService.getRecords(recordDisciplineDto.getAgegroup(), recordDisciplineDto.getGender(), 0, 50).toArray(RecordDto[]::new);
 
             assertArrayEquals(expected, actual);
         }
     }
-
 }

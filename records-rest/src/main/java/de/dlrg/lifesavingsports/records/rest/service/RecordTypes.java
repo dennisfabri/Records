@@ -1,7 +1,7 @@
 package de.dlrg.lifesavingsports.records.rest.service;
 
 import de.dlrg.lifesavingsports.records.api.RecordTypeDto;
-import de.dlrg.lifesavingsports.records.rest.data.RecordType;
+import de.dlrg.lifesavingsports.records.rest.data.RecordTypeEntity;
 import de.dlrg.lifesavingsports.records.rest.repository.RecordTypeRepository;
 import de.dlrg.lifesavingsports.records.service.RecordTypesRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class RecordTypes implements RecordTypesRepository {
 
     @Override
     public void put(RecordTypeDto recordType) {
-        RecordType entity = repository.findById(recordType.getId()).orElseGet(() -> new RecordType(recordType.getId()));
+        RecordTypeEntity entity = repository.findById(recordType.getId()).orElseGet(() -> new RecordTypeEntity(recordType.getId()));
         entity.setAcronym(recordType.getAcronym());
         entity.setName(recordType.getName());
         repository.save(entity);
@@ -25,7 +25,7 @@ public class RecordTypes implements RecordTypesRepository {
 
     @Override
     public Optional<RecordTypeDto> findByAcronym(String acronym) {
-        return repository.findByAcronym(acronym);
+        return repository.findByAcronym(acronym).map(recordType -> recordType.toDto());
     }
 
     @Override
@@ -33,7 +33,7 @@ public class RecordTypes implements RecordTypesRepository {
         return repository.findAll().stream().map(RecordTypes::toDto).toArray(RecordTypeDto[]::new);
     }
 
-    private static RecordTypeDto toDto(RecordType recordType) {
+    private static RecordTypeDto toDto(RecordTypeEntity recordType) {
         return new RecordTypeDto(recordType.getId(), recordType.getName(), recordType.getAcronym());
     }
 }

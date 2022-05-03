@@ -18,6 +18,6 @@ public class RecordsController {
 
     @GetMapping("/records")
     public RecordDto[] getRecords(@RequestParam String agegroup, @RequestParam String gender, @RequestParam int offset, @RequestParam int limit) {
-        return recordsService.getRecords(agegroup, Gender.valueOf(gender), offset, limit);
+        return recordsService.getRecords(agegroup, Gender.valueOf(gender), offset, limit).toArray(RecordDto[]::new);
     }
 }

@@ -34,42 +34,10 @@ public class RecordsView extends Div {
         grid.addComponentColumn(record -> createCard(record));
         add(grid);
 
-        grid.setItems(query -> this.recordsService.fetchTimes("open", Gender.Female, query.getOffset(), query.getLimit()));
+        grid.setItems(query -> this.recordsService.fetchTimes("AK 12", Gender.Female, query.getOffset(), query.getLimit()));
     }
 
     private HorizontalLayout createCard(Record record) {
-        HorizontalLayout card = new HorizontalLayout();
-        card.addClassName("card");
-        card.setSpacing(false);
-        card.getThemeList().add("spacing-s");
-
-        Image image = new Image();
-        VerticalLayout description = new VerticalLayout();
-        description.addClassName("description");
-        description.setSpacing(false);
-        description.setPadding(false);
-
-        HorizontalLayout header = new HorizontalLayout();
-        header.addClassName("header");
-        header.setSpacing(false);
-        header.getThemeList().add("spacing-s");
-
-        Span name = new Span(record.getName());
-        name.addClassName("name");
-        Span date = new Span(record.getClub());
-        date.addClassName("club");
-        header.add(name, date);
-
-        Span post = new Span(record.getNation());
-        post.addClassName("nation");
-
-        HorizontalLayout actions = new HorizontalLayout();
-        actions.addClassName("actions");
-        actions.setSpacing(false);
-        actions.getThemeList().add("spacing-s");
-
-        description.add(header, post, actions);
-        card.add(image, description);
-        return card;
+        return new RecordView(record);
     }
 }
