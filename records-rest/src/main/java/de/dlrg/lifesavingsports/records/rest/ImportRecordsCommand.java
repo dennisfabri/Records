@@ -26,7 +26,6 @@ public class ImportRecordsCommand implements CommandLineRunner {
         if (args[0].equals("-import")) {
             importFile(args[1]);
         }
-
     }
 
     private void importFile(String filename) throws IOException {

@@ -31,7 +31,7 @@ public class RecordView extends HorizontalLayout {
         Span date = new Span(record.getDate());
         discipline.addClassName("date");
 
-        Span time = new Span(record.getDate());
+        Span time = new Span(record.getTime());
         discipline.addClassName("time");
 
         VerticalLayout venueAndDate = new VerticalLayout();
